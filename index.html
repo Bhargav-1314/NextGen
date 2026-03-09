@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d7a3e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NextGen Mart">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>NextGen Mart - Mysore</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+::-webkit-scrollbar{display:none}
+html,body{overflow-x:hidden;font-family:'DM Sans',sans-serif;background:#e8ebe9;overscroll-behavior:none}
+:root{
+  --primary:#0d7a3e;--primary-light:#e8f5ee;--primary-dark:#065c2e;
+  --accent:#f59e0b;--bg:#f8faf9;--card:#fff;
+  --text:#1a2e1f;--text2:#5f7567;--border:#e2e8e4;
+  --grad:linear-gradient(135deg,#0d7a3e 0%,#15803d 50%,#059669 100%);
+  --grad-accent:linear-gradient(135deg,#f59e0b 0%,#d97706 100%);
+}
+
+.app{width:100%;max-width:430px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--bg);position:relative;overflow-x:hidden;box-shadow:0 0 60px rgba(0,0,0,.12)}
+
+/* Header */
+.header{background:var(--grad);padding:14px 20px;position:sticky;top:0;z-index:50}
+.header-row{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff}
+.logo-text{color:#fff;font-size:20px;font-weight:700;letter-spacing:-.5px;font-family:'Playfair Display',serif}
+.logo-sub{color:rgba(255,255,255,.8);font-size:11px;font-weight:500;letter-spacing:.5px}
+.header-icons{display:flex;gap:10px;align-items:center}
+.h-icon{color:#fff;background:rgba(255,255,255,.15);border-radius:12px;padding:8px;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center}
+.badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;border-radius:20px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--primary)}
+
+/* Content */
+.content{padding-bottom:90px;min-height:calc(100vh - 56px)}
+
+/* Bottom Nav */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0 max(8px,env(safe-area-inset-bottom));z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 12px;cursor:pointer;color:var(--text2);transition:all .2s;border-radius:12px;font-weight:500;font-size:11px;border:none;background:transparent;font-family:inherit}
+.nav-item.active{color:var(--primary);background:var(--primary-light);font-weight:600}
+
+/* Sections */
+.section{padding:20px 20px 8px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.see-all{font-size:13px;color:var(--primary);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:2px;border:none;background:none;font-family:inherit}
+
+/* Cards */
+.product-card{background:var(--card);border-radius:16px;border:1px solid var(--border);padding:14px;cursor:pointer;transition:all .2s;position:relative;min-width:155px;max-width:155px;flex-shrink:0}
+.product-card:active{transform:scale(.97)}
+.discount-badge{position:absolute;top:10px;left:10px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;z-index:2}
+.product-img{text-align:center;background:var(--primary-light);border-radius:12px;padding:18px 0;margin-bottom:10px;font-size:40px}
+.product-brand{font-size:12px;color:var(--text2);margin-bottom:2px}
+.product-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.3;height:34px;overflow:hidden}
+.product-weight{font-size:11px;color:var(--text2);margin-bottom:6px}
+.product-bottom{display:flex;align-items:center;justify-content:space-between}
+.price{font-size:16px;font-weight:800;color:var(--primary)}
+.mrp{font-size:11px;color:#aaa;text-decoration:line-through;margin-left:4px}
+.add-btn{width:30px;height:30px;border-radius:10px;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;border:none;flex-shrink:0}
+.add-btn:active{transform:scale(.9)}
+
+/* Category Grid */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cat-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:14px;background:#fff;border:1px solid var(--border);cursor:pointer;font-size:28px;transition:all .15s}
+.cat-item:active{transform:scale(.95)}
+.cat-label{font-size:10px;font-weight:600;color:var(--text);text-align:center}
+
+/* Quick Actions */
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 20px 8px}
+.qa-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:16px;cursor:pointer;transition:all .15s;border:none;font-family:inherit}
+.qa-item:active{transform:scale(.95)}
+.qa-label{font-size:11px;font-weight:600}
+
+/* Promo */
+.promo{border-radius:20px;padding:22px 20px;position:relative;overflow:hidden;min-height:120px;transition:background .6s ease}
+.promo .circle1{position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.1)}
+.promo .circle2{position:absolute;bottom:-30px;right:40px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.08)}
+.promo-badge{background:rgba(255,255,255,.25);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.5px;display:inline-block}
+.promo h3{color:#fff;font-size:22px;font-weight:800;margin:10px 0 4px;line-height:1.1}
+.promo p{color:rgba(255,255,255,.85);font-size:13px;margin:0}
+.dots{display:flex;gap:6px;margin-top:12px}
+.dot{height:6px;border-radius:3px;transition:all .3s}
+
+/* Loyalty Bar */
+.loyalty-bar{background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);border-radius:16px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 15px rgba(245,158,11,.25)}
+.loyalty-pts{font-size:20px;font-weight:800;color:#fff}
+.loyalty-label{font-size:11px;color:rgba(255,255,255,.85);font-weight:500}
+.redeem-btn{background:rgba(255,255,255,.25);border-radius:12px;padding:8px 14px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;border:none;font-family:inherit}
+
+/* Overlay & Modal */
+.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.open{opacity:1;pointer-events:auto}
+.modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:430px;max-height:92vh;overflow:auto;padding:24px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.overlay.open .modal{transform:translateY(0)}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-size:18px;font-weight:700;color:var(--text)}
+.close-btn{cursor:pointer;color:var(--text2);background:none;border:none;padding:4px}
+
+/* Search */
+.search-bar{display:flex;align-items:center;background:rgba(255,255,255,.18);border-radius:14px;padding:12px 16px;cursor:pointer;gap:10px;margin:4px 16px 18px;transition:all .2s}
+.search-bar span{color:rgba(255,255,255,.7);font-size:14px}
+.search-input{flex:1;border:none;background:transparent;font-size:15px;font-family:inherit;outline:none;color:var(--text)}
+.search-box{flex:1;display:flex;align-items:center;background:var(--primary-light);border-radius:14px;padding:12px 16px;gap:10px}
+
+/* List Items */
+.list-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;background:#fff;border:1px solid var(--border);transition:all .2s}
+.checkbox{width:24px;height:24px;border-radius:8px;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s}
+.checkbox.checked{border:none;background:var(--primary)}
+.aisle-tag{font-size:11px;font-weight:600;color:var(--primary);background:var(--primary-light);padding:3px 10px;border-radius:8px}
+
+/* Cart Items */
+.cart-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--bg)}
+.qty-btn{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;font-family:inherit}
+
+/* Buttons */
+.btn-primary{background:var(--grad);color:#fff;border:none;border-radius:12px;padding:12px 20px;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;font-family:inherit;transition:all .2s}
+.btn-primary:active{transform:scale(.98)}
+.btn-outline{background:#fff;color:var(--primary);border:2px solid var(--primary);border-radius:12px;padding:12px 20px;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
+
+/* Product Detail */
+.pd-img{text-align:center;background:var(--primary-light);border-radius:20px;padding:32px 20px;margin-bottom:20px;font-size:72px}
+.pd-stock{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-block;margin-right:8px}
+.in-stock{background:#dcfce7;color:#16a34a}
+.pd-aisle{background:#fef3c7;color:#92400e;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-block}
+.pd-name{font-size:22px;font-weight:700;color:var(--text);margin:8px 0 4px;line-height:1.2}
+.pd-brand{font-size:14px;color:var(--text2);margin-bottom:12px}
+.stars{display:flex;align-items:center;gap:3px;color:#f59e0b;margin-bottom:16px}
+.pd-price{font-size:28px;font-weight:800;color:var(--primary)}
+.pd-mrp{font-size:16px;color:#aaa;text-decoration:line-through;margin-left:10px}
+.off-badge{font-size:13px;font-weight:700;color:#dc2626;background:#fee2e2;padding:2px 8px;border-radius:8px;margin-left:10px}
+
+/* Find in store */
+.find-store{display:flex;align-items:center;gap:10px;padding:14px;border-radius:14px;background:#fffbeb;border:1px solid #fde68a;margin-bottom:16px;cursor:pointer}
+
+/* Map */
+.map-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.aisle-card{border-radius:12px;padding:12px;transition:all .3s}
+.aisle-card.highlight{transform:scale(1.03)}
+.aisle-name{font-size:13px;font-weight:700;margin-bottom:6px}
+.aisle-section{font-size:10px;padding:2px 0 2px 4px;border-radius:4px}
+.map-footer{display:flex;justify-content:space-between;margin-top:12px;font-size:11px;color:var(--text2)}
+
+/* Scanner */
+.scanner-viewport{width:100%;aspect-ratio:1;max-width:280px;margin:0 auto 24px;border-radius:24px;background:#111;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.scan-corner{position:absolute;width:40px;height:40px}
+.scan-corner.tl{top:20px;left:20px;border-top:3px solid var(--primary);border-left:3px solid var(--primary);border-radius:4px 0 0 0}
+.scan-corner.tr{top:20px;right:20px;border-top:3px solid var(--primary);border-right:3px solid var(--primary);border-radius:0 4px 0 0}
+.scan-corner.bl{bottom:20px;left:20px;border-bottom:3px solid var(--primary);border-left:3px solid var(--primary);border-radius:0 0 0 4px}
+.scan-corner.br{bottom:20px;right:20px;border-bottom:3px solid var(--primary);border-right:3px solid var(--primary);border-radius:0 0 4px 0}
+.scan-line{position:absolute;left:30px;right:30px;height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);box-shadow:0 0 15px rgba(13,122,62,.5);animation:scanLine 2s ease-in-out infinite}
+@keyframes scanLine{0%,100%{top:25%}50%{top:70%}}
+
+/* Steps */
+.step-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text)}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+
+/* Cart Float */
+.cart-float{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;border-radius:16px;padding:12px 22px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:0 6px 25px rgba(13,122,62,.35);z-index:90;max-width:380px;width:calc(100% - 40px)}
+.cart-float:active{transform:translateX(-50%) scale(.98)}
+.cart-float-count{background:rgba(255,255,255,.2);border-radius:10px;padding:4px 10px;font-size:14px;font-weight:700}
+
+/* Offers */
+.offer-card{background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden}
+.offer-body{padding:16px}
+.offer-footer{border-top:1px dashed var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;background:var(--bg)}
+.promo-code{font-family:monospace;font-size:14px;font-weight:700;color:var(--primary);background:var(--primary-light);padding:4px 10px;border-radius:8px;letter-spacing:1px}
+
+/* Loyalty Card */
+.loyalty-card{background:var(--grad);border-radius:20px;padding:24px 20px;margin-bottom:20px;position:relative;overflow:hidden}
+.loyalty-card .circle1{position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08)}
+.loyalty-card .circle2{position:absolute;bottom:-20px;left:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.05)}
+.points-big{font-size:40px;font-weight:800;color:#fff;margin-bottom:4px}
+.loy-btn{background:rgba(255,255,255,.2);border-radius:12px;padding:10px 18px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit}
+
+/* Earn row */
+.earn-row{display:flex;align-items:center;gap:14px;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--border)}
+.earn-icon{font-size:28px}
+.earn-pts{font-size:12px;font-weight:700;color:var(--primary);background:var(--primary-light);padding:4px 10px;border-radius:8px}
+
+/* Coupon */
+.coupon-row{display:flex;align-items:center;gap:14px;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--border)}
+.coupon-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.coupon-btn{border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;color:#fff}
+
+/* Order options */
+.order-opt{display:flex;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;cursor:pointer;transition:all .15s}
+.order-opt:active{transform:scale(.98)}
+
+/* Horizontal scroll */
+.h-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.h-scroll>*{scroll-snap-align:start}
+
+/* Recommended */
+.rec-item{display:flex;align-items:center;gap:14px;padding:12px;border-radius:14px;background:#fff;border:1px solid var(--border);cursor:pointer}
+.rec-img{width:56px;height:56px;border-radius:14px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
+
+/* Progress bar */
+.progress-bg{height:8px;border-radius:4px;background:#d1e7d9}
+.progress-fill{height:8px;border-radius:4px;background:var(--primary);transition:width .3s}
+
+/* Route */
+.route-box{background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:14px;margin-top:16px}
+
+/* Add item bar */
+.add-item-bar{display:flex;gap:8px;margin-bottom:16px}
+.add-input{flex:1;border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-size:14px;font-family:inherit;outline:none;background:#fff}
+.add-input:focus{border-color:var(--primary)}
+.add-item-btn{background:var(--primary);border:none;border-radius:12px;padding:0 16px;cursor:pointer;color:#fff;display:flex;align-items:center}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .3s ease}
+
+/* Install banner */
+.install-banner{background:var(--primary-light);border:1px solid var(--primary);border-radius:14px;padding:14px 16px;margin:12px 20px 0;display:flex;align-items:center;gap:12px}
+.install-banner-text{flex:1;font-size:13px;color:var(--text);font-weight:500}
+.install-banner-btn{background:var(--primary);color:#fff;border:none;border-radius:10px;padding:8px 16px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="app" id="app"></div>
+
+<script>
+// ============== DATA ==============
+const categories = [
+  {name:"Groceries",emoji:"🥬",color:"#16a34a",count:245},
+  {name:"Household",emoji:"🏠",color:"#2563eb",count:180},
+  {name:"Packaged",emoji:"📦",color:"#ea580c",count:312},
+  {name:"Personal Care",emoji:"🧴",color:"#9333ea",count:156},
+  {name:"Dairy",emoji:"🥛",color:"#0891b2",count:89},
+  {name:"Beverages",emoji:"🥤",color:"#dc2626",count:134},
+  {name:"Snacks",emoji:"🍿",color:"#ca8a04",count:198},
+  {name:"Fresh Fruits",emoji:"🍎",color:"#e11d48",count:76}
+];
+
+const products = [
+  {id:1,name:"Organic Basmati Rice",brand:"India Gate",price:289,mrp:340,weight:"5 kg",category:"Groceries",aisle:"A3",section:"Grains & Pulses",rating:4.5,reviews:234,inStock:true,img:"🍚"},
+  {id:2,name:"Cold Pressed Coconut Oil",brand:"KLF Nirmal",price:199,mrp:250,weight:"1 L",category:"Groceries",aisle:"A4",section:"Cooking Oils",rating:4.7,reviews:189,inStock:true,img:"🫒"},
+  {id:3,name:"Mysore Sandal Soap",brand:"KSD",price:52,mrp:60,weight:"75 g",category:"Personal Care",aisle:"B2",section:"Bath & Body",rating:4.8,reviews:567,inStock:true,img:"🧼"},
+  {id:4,name:"Filter Coffee Powder",brand:"Cothas",price:175,mrp:200,weight:"500 g",category:"Beverages",aisle:"C1",section:"Tea & Coffee",rating:4.6,reviews:312,inStock:true,img:"☕"},
+  {id:5,name:"Ragi Flour",brand:"MTR",price:85,mrp:95,weight:"1 kg",category:"Groceries",aisle:"A3",section:"Grains & Pulses",rating:4.3,reviews:145,inStock:true,img:"🌾"},
+  {id:6,name:"Toor Dal Premium",brand:"Tata Sampann",price:159,mrp:185,weight:"1 kg",category:"Groceries",aisle:"A3",section:"Grains & Pulses",rating:4.4,reviews:278,inStock:true,img:"🫘"},
+  {id:7,name:"Whole Wheat Atta",brand:"Aashirvaad",price:245,mrp:280,weight:"5 kg",category:"Packaged",aisle:"A2",section:"Flour & Mixes",rating:4.5,reviews:456,inStock:true,img:"🌾"},
+  {id:8,name:"Hand Wash Liquid",brand:"Dettol",price:125,mrp:150,weight:"750 ml",category:"Personal Care",aisle:"B3",section:"Hygiene",rating:4.2,reviews:189,inStock:true,img:"🫧"},
+  {id:9,name:"Full Cream Milk",brand:"Nandini",price:30,mrp:30,weight:"500 ml",category:"Dairy",aisle:"D1",section:"Fresh Dairy",rating:4.6,reviews:890,inStock:true,img:"🥛"},
+  {id:10,name:"Masala Chips",brand:"Lay's",price:20,mrp:20,weight:"52 g",category:"Snacks",aisle:"C3",section:"Chips & Namkeen",rating:4.1,reviews:345,inStock:true,img:"🥔"},
+  {id:11,name:"Floor Cleaner",brand:"Lizol",price:185,mrp:220,weight:"975 ml",category:"Household",aisle:"B4",section:"Cleaning",rating:4.3,reviews:167,inStock:true,img:"🧹"},
+  {id:12,name:"Fresh Bananas",brand:"Local Farm",price:45,mrp:50,weight:"1 dozen",category:"Fresh Fruits",aisle:"D2",section:"Fresh Produce",rating:4.4,reviews:123,inStock:true,img:"🍌"}
+];
+
+const promotions = [
+  {title:"Grand Opening Week!",subtitle:"Flat 20% off on all products",color:"#059669",badge:"NEW STORE"},
+  {title:"Mysore Special Combo",subtitle:"Buy 3 local brands, get 1 free",color:"#7c3aed",badge:"MYSORE"},
+  {title:"First Purchase Reward",subtitle:"Earn 500 bonus loyalty points",color:"#0284c7",badge:"BONUS"}
+];
+
+const offers = [
+  {id:1,title:"20% Off Fresh Produce",desc:"Valid on all fruits & vegetables",code:"FRESH20",valid:"Mar 15, 2026",min:300},
+  {id:2,title:"Buy 2 Get 1 Free",desc:"On select Household items",code:"HOME3X",valid:"Mar 20, 2026",min:500},
+  {id:3,title:"Flat ₹100 Off",desc:"On orders above ₹999",code:"NGM100",valid:"Mar 31, 2026",min:999},
+  {id:4,title:"Free Delivery",desc:"On your first app order",code:"FIRSTFREE",valid:"Apr 10, 2026",min:0}
+];
+
+const storeAisles = [
+  {id:"A",name:"Aisle A",sections:["A1: Biscuits & Cookies","A2: Flour & Mixes","A3: Grains & Pulses","A4: Cooking Oils"],color:"#16a34a"},
+  {id:"B",name:"Aisle B",sections:["B1: Laundry","B2: Bath & Body","B3: Hygiene","B4: Cleaning"],color:"#2563eb"},
+  {id:"C",name:"Aisle C",sections:["C1: Tea & Coffee","C2: Juices & Drinks","C3: Chips & Namkeen","C4: Instant Food"],color:"#ea580c"},
+  {id:"D",name:"Aisle D",sections:["D1: Fresh Dairy","D2: Fresh Produce","D3: Frozen","D4: Bakery"],color:"#9333ea"}
+];
+
+// ============== STATE ==============
+let state = {
+  tab: "home",
+  cart: [],
+  list: [
+    {id:1,name:"Basmati Rice",checked:false,aisle:"A3"},
+    {id:2,name:"Coconut Oil",checked:false,aisle:"A4"},
+    {id:3,name:"Filter Coffee",checked:true,aisle:"C1"},
+    {id:4,name:"Nandini Milk",checked:false,aisle:"D1"},
+    {id:5,name:"Bananas",checked:false,aisle:"D2"}
+  ],
+  loyaltyPoints: 1250,
+  promoIdx: 0,
+  overlay: null, // 'search','product','scanner','map','checkout','order'
+  selectedProduct: null,
+  mapTarget: null,
+  searchQuery: "",
+  activeCategory: null,
+  newListItem: "",
+  toast: null
+};
+
+function setState(updates) {
+  Object.assign(state, updates);
+  render();
+}
+
+// SVG Icons
+const svg = {
+  home: `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>`,
+  search: `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>`,
+  scan: `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>`,
+  cart: `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>`,
+  bell: `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>`,
+  tag: `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>`,
+  list: `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
+  award: `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`,
+  map: `<svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/></svg>`,
+  bag: `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>`,
+  plus: `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+  minus: `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+  x: `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  back: `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>`,
+  right: `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`,
+  star: `<svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
+  heart: `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>`,
+  check: `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,
+  gift: `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 010-5C9 3 12 8 12 8s3-5 4.5-5a2.5 2.5 0 010 5"/></svg>`,
+  pin: `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  truck: `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`,
+  store: `<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  clock: `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
+  sparkle: `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 8.41L23 11L14.59 13.59L12 22L9.41 13.59L1 11L9.41 8.41L12 0Z"/></svg>`,
+  percent: `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`,
+};
+
+// ============== HELPERS ==============
+function addToCart(product) {
+  const exists = state.cart.find(i => i.id === product.id);
+  if (exists) {
+    state.cart = state.cart.map(i => i.id === product.id ? {...i, qty: i.qty + 1} : i);
+  } else {
+    state.cart = [...state.cart, {...product, qty: 1}];
+  }
+  showToast(`${product.name} added to cart`);
+  render();
+}
+
+function removeFromCart(id) {
+  const item = state.cart.find(i => i.id === id);
+  if (item && item.qty > 1) {
+    state.cart = state.cart.map(i => i.id === id ? {...i, qty: i.qty - 1} : i);
+  } else {
+    state.cart = state.cart.filter(i => i.id !== id);
+  }
+  render();
+}
+
+function cartTotal() { return state.cart.reduce((s, i) => s + i.price * i.qty, 0); }
+function cartCount() { return state.cart.reduce((s, i) => s + i.qty, 0); }
+function cartSavings() { return state.cart.reduce((s, i) => s + (i.mrp - i.price) * i.qty, 0); }
+
+function discountPct(p) { return p.price < p.mrp ? Math.round((1 - p.price / p.mrp) * 100) : 0; }
+
+function filteredProducts() {
+  return products.filter(p => {
+    if (state.activeCategory) return p.category === state.activeCategory;
+    if (state.searchQuery) return p.name.toLowerCase().includes(state.searchQuery.toLowerCase()) || p.brand.toLowerCase().includes(state.searchQuery.toLowerCase());
+    return true;
+  });
+}
+
+function starsHTML(rating) {
+  return Array.from({length:5}, (_,i) => `<span style="opacity:${i < Math.floor(rating) ? 1 : 0.3}">${svg.star}</span>`).join('');
+}
+
+let toastTimer;
+function showToast(msg) {
+  state.toast = msg;
+  render();
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { state.toast = null; render(); }, 2000);
+}
+
+// ============== PROMO CAROUSEL ==============
+setInterval(() => {
+  state.promoIdx = (state.promoIdx + 1) % promotions.length;
+  const el = document.getElementById('promo-card');
+  if (el) {
+    const p = promotions[state.promoIdx];
+    el.style.background = `linear-gradient(135deg, ${p.color} 0%, ${p.color}dd 100%)`;
+    el.querySelector('.promo-badge').textContent = p.badge;
+    el.querySelector('h3').textContent = p.title;
+    el.querySelector('p').textContent = p.subtitle;
+    document.querySelectorAll('.promo-dot').forEach((d, i) => {
+      d.style.width = i === state.promoIdx ? '20px' : '6px';
+      d.style.background = i === state.promoIdx ? '#fff' : 'rgba(255,255,255,.4)';
+    });
+  }
+}, 4000);
+
+// ============== RENDER ==============
+function render() {
+  const app = document.getElementById('app');
+  const cc = cartCount();
+  
+  let html = `
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-row">
+        <div class="logo">
+          <div class="logo-icon">N</div>
+          <div><div class="logo-text">NextGen Mart</div><div class="logo-sub">MYSORE</div></div>
+        </div>
+        <div class="header-icons">
+          <div class="h-icon">${svg.bell}<div class="badge">2</div></div>
+          <div class="h-icon" onclick="setState({overlay:'checkout'})">${svg.cart}${cc > 0 ? `<div class="badge">${cc}</div>` : ''}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content fade-in">
+      ${renderTab()}
+    </div>
+
+    <!-- CART FLOAT -->
+    ${cc > 0 && state.tab !== 'rewards' ? `
+      <div class="cart-float" onclick="setState({overlay:'checkout'})">
+        <div class="cart-float-count">${cc}</div>
+        <span style="flex:1;font-weight:600;font-size:14px">View Cart</span>
+        <span style="font-weight:800;font-size:16px">₹${cartTotal()}</span>
+      </div>
+    ` : ''}
+
+    <!-- NAV -->
+    <div class="nav">
+      ${[
+        {id:'home',label:'Home',icon:svg.home},
+        {id:'offers',label:'Offers',icon:svg.tag},
+        {id:'list',label:'My List',icon:svg.list},
+        {id:'rewards',label:'Rewards',icon:svg.award}
+      ].map(t => `
+        <button class="nav-item ${state.tab===t.id?'active':''}" onclick="setState({tab:'${t.id}'})">${t.icon}<span>${t.label}</span></button>
+      `).join('')}
+    </div>
+
+    <!-- OVERLAYS -->
+    ${renderOverlay()}
+
+    <!-- TOAST -->
+    ${state.toast ? `<div style="position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#1a2e1f;color:#fff;padding:10px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,.2);animation:fadeIn .2s">${state.toast}</div>` : ''}
+  `;
+
+  app.innerHTML = html;
+}
+
+function renderTab() {
+  switch(state.tab) {
+    case 'home': return renderHome();
+    case 'offers': return renderOffers();
+    case 'list': return renderList();
+    case 'rewards': return renderRewards();
+    default: return renderHome();
+  }
+}
+
+// ============== HOME ==============
+function renderHome() {
+  const p = promotions[state.promoIdx];
+  return `
+    <!-- Search -->
+    <div style="padding:0 20px;margin-top:-1px">
+      <div style="background:var(--grad);border-radius:0 0 24px 24px;padding:4px 16px 18px">
+        <div class="search-bar" onclick="setState({overlay:'search'})">
+          ${svg.search}<span>Search products, brands...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loyalty -->
+    <div style="padding:16px 20px 0">
+      <div class="loyalty-bar">
+        <div style="display:flex;align-items:center;gap:10px">
+          ${svg.award}
+          <div><div class="loyalty-label">Loyalty Points</div><div class="loyalty-pts">${state.loyaltyPoints.toLocaleString()}</div></div>
+        </div>
+        <button class="redeem-btn" onclick="setState({tab:'rewards'})">Redeem</button>
+      </div>
+    </div>
+
+    <!-- Promo -->
+    <div style="padding:16px 20px">
+      <div class="promo" id="promo-card" style="background:linear-gradient(135deg,${p.color} 0%,${p.color}dd 100%)">
+        <div class="circle1"></div><div class="circle2"></div>
+        <span class="promo-badge">${p.badge}</span>
+        <h3>${p.title}</h3>
+        <p>${p.subtitle}</p>
+        <div class="dots">${promotions.map((_,i) => `<div class="dot promo-dot" style="width:${i===state.promoIdx?20:6}px;background:${i===state.promoIdx?'#fff':'rgba(255,255,255,.4)'}"></div>`).join('')}</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="qa-grid">
+      <button class="qa-item" style="background:var(--primary-light)" onclick="setState({overlay:'scanner'})">
+        <span style="color:var(--primary)">${svg.scan}</span><span class="qa-label" style="color:var(--primary)">Scan & Go</span>
+      </button>
+      <button class="qa-item" style="background:#eff6ff" onclick="setState({overlay:'map',mapTarget:null})">
+        <span style="color:#2563eb">${svg.map}</span><span class="qa-label" style="color:#2563eb">Store Map</span>
+      </button>
+      <button class="qa-item" style="background:#fff7ed" onclick="setState({tab:'list'})">
+        <span style="color:#ea580c">${svg.list}</span><span class="qa-label" style="color:#ea580c">My List</span>
+      </button>
+      <button class="qa-item" style="background:#f3e8ff" onclick="setState({overlay:'order'})">
+        <span style="color:#7c3aed">${svg.bag}</span><span class="qa-label" style="color:#7c3aed">Order</span>
+      </button>
+    </div>
+
+    <!-- Categories -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">Shop by Category</span>
+        <button class="see-all" onclick="setState({overlay:'search'})">See All ${svg.right}</button>
+      </div>
+      <div class="cat-grid">
+        ${categories.map(c => `<div class="cat-item" onclick="setState({overlay:'search',activeCategory:'${c.name}'})">${c.emoji}<span class="cat-label">${c.name}</span></div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Featured -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title">Grand Opening Picks</span>
+        <button class="see-all" onclick="setState({overlay:'search'})">See All ${svg.right}</button>
+      </div>
+      <div class="h-scroll">
+        ${products.slice(0,6).map(p => `
+          <div class="product-card" onclick="setState({overlay:'product',selectedProduct:${p.id}})">
+            ${discountPct(p) > 0 ? `<div class="discount-badge">-${discountPct(p)}%</div>` : ''}
+            <div class="product-img">${p.img}</div>
+            <div class="product-brand">${p.brand}</div>
+            <div class="product-name">${p.name}</div>
+            <div class="product-weight">${p.weight}</div>
+            <div class="product-bottom">
+              <div><span class="price">₹${p.price}</span>${p.price<p.mrp?`<span class="mrp">₹${p.mrp}</span>`:''}</div>
+              <button class="add-btn" onclick="event.stopPropagation();addToCart(products[${products.indexOf(p)}])">${svg.plus}</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Recommended -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-title"><span style="display:flex;align-items:center;gap:6px"><span style="color:#f59e0b">${svg.sparkle}</span> Recommended</span></span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${products.slice(6,10).map(p => `
+          <div class="rec-item" onclick="setState({overlay:'product',selectedProduct:${p.id}})">
+            <div class="rec-img">${p.img}</div>
+            <div style="flex:1">
+              <div style="font-size:14px;font-weight:600;color:var(--text)">${p.name}</div>
+              <div style="font-size:12px;color:var(--text2)">${p.brand} · ${p.weight}</div>
+              <div style="display:flex;align-items:center;gap:4px;margin-top:4px"><span style="color:#f59e0b;display:flex">${svg.star}</span><span style="font-size:12px;font-weight:600">${p.rating}</span></div>
+            </div>
+            <div style="text-align:right"><div class="price">₹${p.price}</div>${p.price<p.mrp?`<div class="mrp">₹${p.mrp}</div>`:''}</div>
+            <button class="add-btn" style="background:var(--primary-light);color:var(--primary)" onclick="event.stopPropagation();addToCart(products[${products.indexOf(p)}])">${svg.plus}</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============== OFFERS ==============
+function renderOffers() {
+  return `
+    <div style="padding:16px 20px">
+      <h2 style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px">Offers & Deals</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Exclusive deals for our Mysore store launch</p>
+      <div style="background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:20px;padding:20px;margin-bottom:20px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-15px;right:-15px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.1)"></div>
+        <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:1px">Launch Special</span>
+        <h3 style="color:#fff;font-size:24px;font-weight:800;margin:8px 0 4px">Grand Opening Week</h3>
+        <p style="color:rgba(255,255,255,.85);font-size:13px;margin:0 0 12px">Up to 30% off on 500+ products</p>
+        <div style="background:rgba(255,255,255,.2);border-radius:10px;padding:6px 14px;display:inline-block;color:#fff;font-size:12px;font-weight:600">Ends Mar 20, 2026</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        ${offers.map(o => `
+          <div class="offer-card">
+            <div class="offer-body">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                <span style="color:#ef4444">${svg.tag}</span>
+                <span style="font-size:15px;font-weight:700;color:var(--text)">${o.title}</span>
+              </div>
+              <div style="font-size:12px;color:var(--text2)">${o.desc}</div>
+              ${o.min>0?`<div style="font-size:11px;color:var(--text2);margin-top:4px">Min. order: ₹${o.min}</div>`:''}
+            </div>
+            <div class="offer-footer">
+              <span class="promo-code">${o.code}</span>
+              <span style="font-size:11px;color:var(--text2)">Valid till ${o.valid}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:24px">
+        <div class="section-head"><span class="section-title"><span style="display:flex;align-items:center;gap:6px"><span style="color:#f59e0b">${svg.sparkle}</span> Just for You</span></span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          ${products.slice(0,4).map(p => `
+            <div style="background:#fff;border-radius:14px;border:1px solid var(--border);padding:12px;cursor:pointer" onclick="setState({overlay:'product',selectedProduct:${p.id}})">
+              <div style="text-align:center;font-size:36px;margin-bottom:8px">${p.img}</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;line-height:1.3">${p.name}</div>
+              <div style="display:flex;align-items:center;gap:4px"><span style="font-size:14px;font-weight:800;color:var(--primary)">₹${p.price}</span>${discountPct(p)>0?`<span style="font-size:10px;color:#ef4444;font-weight:700">-${discountPct(p)}%</span>`:''}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============== LIST ==============
+function renderList() {
+  const sorted = [...state.list].sort((a,b) => a.aisle.localeCompare(b.aisle));
+  const checked = sorted.filter(i => i.checked).length;
+  const aisles = [...new Set(sorted.filter(i => !i.checked).map(i => i.aisle))];
+  return `
+    <div style="padding:16px 20px">
+      <h2 style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px">Smart Shopping List</h2>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Auto-organized by store aisle for the fastest trip</p>
+      <div style="background:var(--primary-light);border-radius:14px;padding:14px;margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px"><span>Progress</span><span>${checked}/${state.list.length} items</span></div>
+        <div class="progress-bg"><div class="progress-fill" style="width:${(checked/state.list.length)*100}%"></div></div>
+      </div>
+      <div class="add-item-bar">
+        <input class="add-input" placeholder="Add item to list..." id="listInput" value="${state.newListItem}" oninput="state.newListItem=this.value" onkeydown="if(event.key==='Enter'&&this.value.trim()){state.list.push({id:Date.now(),name:this.value.trim(),checked:false,aisle:'A1'});state.newListItem='';render()}">
+        <button class="add-item-btn" onclick="var v=document.getElementById('listInput').value.trim();if(v){state.list.push({id:Date.now(),name:v,checked:false,aisle:'A1'});state.newListItem='';render()}">${svg.plus}</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${sorted.map(item => `
+          <div class="list-item" style="opacity:${item.checked?0.6:1}">
+            <div class="checkbox ${item.checked?'checked':''}" onclick="state.list=state.list.map(i=>i.id===${item.id}?{...i,checked:!i.checked}:i);render()">
+              ${item.checked?`<span style="color:#fff">${svg.check}</span>`:''}
+            </div>
+            <div style="flex:1"><span style="font-size:14px;font-weight:600;color:var(--text);${item.checked?'text-decoration:line-through':''}">${item.name}</span></div>
+            <span class="aisle-tag">${item.aisle}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="route-box">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">${svg.map}<span style="font-size:14px;font-weight:700;color:#92400e">Optimized Route</span></div>
+        <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">
+          <span style="font-size:12px;color:#92400e">🚪 Entry</span>
+          ${aisles.map(a => `<span style="color:#d97706">→</span><span style="font-size:12px;font-weight:600;color:#92400e;background:#fef3c7;padding:2px 8px;border-radius:6px">${a}</span>`).join('')}
+          <span style="color:#d97706">→</span><span style="font-size:12px;color:#92400e">💰 Checkout</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============== REWARDS ==============
+function renderRewards() {
+  const pts = state.loyaltyPoints;
+  return `
+    <div style="padding:16px 20px">
+      <h2 style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:16px">Rewards & Loyalty</h2>
+      <div class="loyalty-card">
+        <div class="circle1"></div><div class="circle2"></div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);font-weight:500;margin-bottom:4px">Total Points Balance</div>
+        <div class="points-big">${pts.toLocaleString()}</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.8);margin-bottom:16px">= ₹${Math.floor(pts/10)} redeemable value</div>
+        <div style="display:flex;gap:10px"><button class="loy-btn">Redeem Points</button><button class="loy-btn">History</button></div>
+      </div>
+      <div style="margin-bottom:20px">
+        <span style="font-size:16px;font-weight:700;color:var(--text);display:block;margin-bottom:12px">How to Earn Points</span>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          ${[
+            {icon:"🛍️",title:"Shop In-Store",desc:"1 point per ₹10 spent",pts:"+1pt/₹10"},
+            {icon:"👥",title:"Refer a Friend",desc:"Both earn 200 bonus points",pts:"+200pts"},
+            {icon:"⭐",title:"Write Reviews",desc:"50 points per product review",pts:"+50pts"},
+            {icon:"📱",title:"Daily Check-in",desc:"10 points for app check-in",pts:"+10pts"}
+          ].map(e => `
+            <div class="earn-row"><span class="earn-icon">${e.icon}</span><div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text)">${e.title}</div><div style="font-size:12px;color:var(--text2)">${e.desc}</div></div><span class="earn-pts">${e.pts}</span></div>
+          `).join('')}
+        </div>
+      </div>
+      <div>
+        <span style="font-size:16px;font-weight:700;color:var(--text);display:block;margin-bottom:12px">Member Coupons</span>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          ${[
+            {title:"₹50 Off on ₹500+",points:500,color:"#16a34a"},
+            {title:"Free Coffee on ₹999+",points:800,color:"#7c3aed"},
+            {title:"10% Off Entire Order",points:1200,color:"#ea580c"}
+          ].map(c => `
+            <div class="coupon-row">
+              <div class="coupon-icon" style="background:${c.color}15"><span style="color:${c.color}">${svg.gift}</span></div>
+              <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text)">${c.title}</div><div style="font-size:12px;color:var(--text2)">${c.points} points to redeem</div></div>
+              <button class="coupon-btn" style="background:${pts>=c.points?c.color:'#e5e7eb'};cursor:${pts>=c.points?'pointer':'default'}">${pts>=c.points?'Redeem':'Locked'}</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============== OVERLAYS ==============
+function renderOverlay() {
+  if (!state.overlay) return '';
+  
+  let content = '';
+  switch(state.overlay) {
+    case 'search': content = renderSearchModal(); break;
+    case 'product': content = renderProductModal(); break;
+    case 'scanner': content = renderScannerModal(); break;
+    case 'map': content = renderMapModal(); break;
+    case 'checkout': content = renderCheckoutModal(); break;
+    case 'order': content = renderOrderModal(); break;
+    default: return '';
+  }
+  
+  return `<div class="overlay open" onclick="setState({overlay:null,selectedProduct:null,mapTarget:null,searchQuery:'',activeCategory:null})"><div class="modal" onclick="event.stopPropagation()">${content}</div></div>`;
+}
+
+function renderSearchModal() {
+  const fp = filteredProducts();
+  return `
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div class="search-box">
+        ${svg.search}
+        <input class="search-input" autofocus value="${state.searchQuery}" oninput="state.searchQuery=this.value;render();setTimeout(()=>this.focus(),0)" placeholder="Search products, brands...">
+      </div>
+      <button class="close-btn" onclick="setState({overlay:null,searchQuery:'',activeCategory:null})">${svg.x}</button>
+    </div>
+    ${state.activeCategory ? `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <span style="font-size:13px;color:var(--text2)">Category:</span>
+        <span style="background:var(--primary-light);color:var(--primary);padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600">${state.activeCategory}</span>
+        <button class="close-btn" onclick="state.activeCategory=null;render()">${svg.x}</button>
+      </div>
+    ` : ''}
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${fp.map(p => `
+        <div style="display:flex;align-items:center;gap:14px;padding:12px;border-radius:14px;background:var(--bg);cursor:pointer" onclick="setState({overlay:'product',selectedProduct:${p.id}})">
+          <div style="width:50px;height:50px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:28px">${p.img}</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:600;color:var(--text)">${p.name}</div><div style="font-size:12px;color:var(--text2)">${p.brand} · ${p.weight}</div></div>
+          <div style="text-align:right"><div style="font-size:15px;font-weight:700;color:var(--primary)">₹${p.price}</div>${p.price<p.mrp?`<div style="font-size:11px;color:#aaa;text-decoration:line-through">₹${p.mrp}</div>`:''}</div>
+        </div>
+      `).join('')}
+      ${fp.length===0?`<div style="text-align:center;padding:40px;color:var(--text2)"><div style="font-size:40px;margin-bottom:12px">🔍</div><div style="font-size:15px;font-weight:600">No products found</div><div style="font-size:13px">Try a different search term</div></div>`:''}
+    </div>
+  `;
+}
+
+function renderProductModal() {
+  const p = products.find(x => x.id === state.selectedProduct);
+  if (!p) return '';
+  return `
+    <div class="modal-head">
+      <button class="close-btn" onclick="setState({overlay:null,selectedProduct:null})">${svg.back}</button>
+      <span style="font-size:15px;font-weight:600;color:var(--text)">Product Details</span>
+      <span style="color:var(--text2)">${svg.heart}</span>
+    </div>
+    <div class="pd-img">${p.img}</div>
+    <div style="margin-bottom:6px">
+      <span class="pd-stock in-stock">${p.inStock?'In Stock':'Out of Stock'}</span>
+      <span class="pd-aisle">${p.aisle} · ${p.section}</span>
+    </div>
+    <h2 class="pd-name">${p.name}</h2>
+    <div class="pd-brand">${p.brand} · ${p.weight}</div>
+    <div class="stars" style="gap:6px">${starsHTML(p.rating)}<span style="font-size:13px;font-weight:600;color:var(--text)">${p.rating}</span><span style="font-size:12px;color:var(--text2)">(${p.reviews} reviews)</span></div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:20px">
+      <span class="pd-price">₹${p.price}</span>
+      ${p.price<p.mrp?`<span class="pd-mrp">₹${p.mrp}</span><span class="off-badge">${discountPct(p)}% OFF</span>`:''}
+    </div>
+    <div class="find-store" onclick="setState({overlay:'map',mapTarget:${JSON.stringify(p).replace(/"/g,'&quot;')}})">
+      ${svg.pin}
+      <div style="flex:1"><div style="font-size:13px;font-weight:600;color:#92400e">Find in Store</div><div style="font-size:12px;color:#a16207">${p.aisle} - ${p.section}</div></div>
+      ${svg.right}
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn-primary" style="flex:2" onclick="addToCart(products[${products.indexOf(p)}]);setState({overlay:null,selectedProduct:null})">${svg.cart} Add to Cart</button>
+      <button class="btn-outline" style="flex:1" onclick="setState({overlay:'map',mapTarget:${JSON.stringify(p).replace(/"/g,'&quot;')}})">${svg.map}</button>
+    </div>
+  `;
+}
+
+function renderScannerModal() {
+  return `
+    <div class="modal-head"><span class="modal-title">Scan & Go</span><button class="close-btn" onclick="setState({overlay:null})">${svg.x}</button></div>
+    <div class="scanner-viewport">
+      <div class="scan-corner tl"></div><div class="scan-corner tr"></div>
+      <div class="scan-corner bl"></div><div class="scan-corner br"></div>
+      <div class="scan-line"></div>
+      <div style="color:rgba(255,255,255,.6);font-size:14px">Point at barcode</div>
+    </div>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:20px;text-align:center">Scan product barcodes to instantly add items to your cart. No queue needed!</p>
+    <div style="background:var(--primary-light);border-radius:14px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--primary);margin-bottom:8px">How Scan & Go works</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${["Scan barcode on any product","Items added to digital cart","Review & pay in app","Show QR at exit"].map((s,i) => `<div class="step-row"><span class="step-num">${i+1}</span>${s}</div>`).join('')}
+      </div>
+    </div>
+    <button class="btn-primary" onclick="addToCart(products[Math.floor(Math.random()*products.length)])">${svg.scan} Simulate Scan</button>
+  `;
+}
+
+function renderMapModal() {
+  const t = state.mapTarget;
+  return `
+    <div class="modal-head"><span class="modal-title">Store Navigator</span><button class="close-btn" onclick="setState({overlay:null,mapTarget:null})">${svg.x}</button></div>
+    ${t ? `
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+        <span style="font-size:32px">${t.img}</span>
+        <div><div style="font-size:14px;font-weight:600;color:#92400e">Finding: ${t.name}</div><div style="font-size:13px;color:#a16207">${t.aisle} - ${t.section}</div></div>
+      </div>
+    ` : ''}
+    <div style="background:var(--bg);border-radius:16px;padding:16px;border:1px solid var(--border);margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1px">NextGen Mart - Floor Plan</span>
+        <span style="font-size:11px;color:var(--text2)">2500 sq ft</span>
+      </div>
+      <div class="map-grid">
+        ${storeAisles.map(a => {
+          const hl = t && t.aisle && t.aisle.startsWith(a.id);
+          return `
+            <div class="aisle-card ${hl?'highlight':''}" style="background:${hl?a.color:'#fff'};border:2px solid ${a.color};${hl?`box-shadow:0 4px 15px ${a.color}40`:''}">
+              <div class="aisle-name" style="color:${hl?'#fff':a.color}">${a.name}</div>
+              ${a.sections.map(s => {
+                const shl = t && t.section && s.includes(t.section);
+                return `<div class="aisle-section" style="color:${hl?'rgba(255,255,255,.85)':'var(--text2)'};font-weight:${shl?700:400};background:${shl?'rgba(255,255,255,.2)':'transparent'}">${shl?'📍 ':''}${s}</div>`;
+              }).join('')}
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <div class="map-footer"><span>🚪 Entrance</span><span>💰 Billing</span><span>🚪 Exit</span></div>
+    </div>
+    ${t ? `
+      <div style="background:var(--primary-light);border-radius:14px;padding:14px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">${svg.pin}<span style="font-size:14px;font-weight:600;color:var(--primary)">Directions</span></div>
+        <div style="font-size:13px;color:var(--text);line-height:1.6">From the entrance, walk straight past the billing counters. Turn <strong>${t.aisle.startsWith('A')||t.aisle.startsWith('B')?'left':'right'}</strong> at ${storeAisles.find(x=>x.id===t.aisle[0])?.name||'the aisle'}. Look for the <strong>${t.section}</strong> signage on your ${t.aisle.endsWith('1')||t.aisle.endsWith('2')?'left':'right'}.</div>
+      </div>
+    ` : ''}
+  `;
+}
+
+function renderCheckoutModal() {
+  const cc = cartCount(), ct = cartTotal(), cs = cartSavings();
+  return `
+    <div class="modal-head"><span class="modal-title">Your Cart</span><button class="close-btn" onclick="setState({overlay:null})">${svg.x}</button></div>
+    ${state.cart.length === 0 ? `
+      <div style="text-align:center;padding:40px"><div style="font-size:56px;margin-bottom:16px">🛒</div><div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px">Your cart is empty</div><div style="font-size:13px;color:var(--text2)">Scan products or add from search</div></div>
+    ` : `
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+        ${state.cart.map(item => `
+          <div class="cart-item">
+            <div style="width:48px;height:48px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px">${item.img}</div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--text)">${item.name}</div><div style="font-size:12px;color:var(--text2)">${item.brand} · ${item.weight}</div></div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <button class="qty-btn" style="background:var(--primary-light);color:var(--primary)" onclick="removeFromCart(${item.id})">${svg.minus}</button>
+              <span style="font-size:14px;font-weight:700;min-width:20px;text-align:center">${item.qty}</span>
+              <button class="qty-btn" style="background:var(--primary);color:#fff" onclick="addToCart(products.find(p=>p.id===${item.id}))">${svg.plus}</button>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:var(--primary);min-width:55px;text-align:right">₹${item.price*item.qty}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="background:var(--primary-light);border-radius:14px;padding:16px;margin-bottom:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;color:var(--text)"><span>Subtotal (${cc} items)</span><span style="font-weight:600">₹${ct}</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;color:#16a34a"><span>Savings</span><span style="font-weight:600">-₹${cs}</span></div>
+        <div style="border-top:1px dashed var(--border);padding-top:8px;display:flex;justify-content:space-between;font-size:18px;font-weight:800;color:var(--text)"><span>Total</span><span>₹${ct}</span></div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-primary" style="flex:2" onclick="state.cart=[];showToast('Order placed successfully!');setState({overlay:null})">Pay ₹${ct}</button>
+        <button class="btn-outline" style="flex:1" onclick="setState({overlay:'scanner'})">${svg.scan}</button>
+      </div>
+    `}
+  `;
+}
+
+function renderOrderModal() {
+  return `
+    <div class="modal-head"><span class="modal-title">Order & Pickup</span><button class="close-btn" onclick="setState({overlay:null})">${svg.x}</button></div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      ${[
+        {icon:svg.store,title:"In-Store Pickup",desc:"Order now, pick up at NextGen Mart Mysore within 2 hours",time:"Ready in ~2 hrs",color:"var(--primary)",bg:"var(--primary-light)"},
+        {icon:svg.truck,title:"Home Delivery",desc:"Get your order delivered to your doorstep in Mysore",time:"Same day delivery",color:"#7c3aed",bg:"#f3e8ff"},
+        {icon:svg.clock,title:"Schedule Pickup",desc:"Choose a convenient time slot for collection",time:"Pick your slot",color:"#ea580c",bg:"#fff7ed"}
+      ].map(o => `
+        <div class="order-opt" style="background:${o.bg};border:1px solid ${o.color}20">
+          <span style="color:${o.color};margin-top:2px">${o.icon}</span>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">${o.title}</div>
+            <div style="font-size:12px;color:var(--text2);line-height:1.4">${o.desc}</div>
+            <div style="font-size:11px;font-weight:600;color:${o.color};margin-top:6px;display:flex;align-items:center;gap:4px">${svg.clock} ${o.time}</div>
+          </div>
+          ${svg.right}
+        </div>
+      `).join('')}
+    </div>
+    <div style="background:var(--bg);border-radius:14px;padding:14px;margin-top:16px">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px">Store Location</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.5">NextGen Mart, Saraswathipuram Main Road, Mysore, Karnataka 570009</div>
+      <div style="font-size:12px;color:var(--primary);font-weight:600;margin-top:6px">Open: 8:00 AM - 10:00 PM</div>
+    </div>
+  `;
+}
+
+// ============== INIT ==============
+render();
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// PWA Install
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const banner = document.createElement('div');
+  banner.className = 'install-banner';
+  banner.innerHTML = `
+    <span style="font-size:24px">📲</span>
+    <span class="install-banner-text">Install NextGen Mart for the best experience</span>
+    <button class="install-banner-btn" id="installBtn">Install App</button>
+  `;
+  document.querySelector('.content')?.prepend(banner);
+  document.getElementById('installBtn')?.addEventListener('click', () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; banner.remove(); });
+  });
+});
+</script>
+</body>
+</html>
