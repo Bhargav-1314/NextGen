@@ -13,8 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-::-webkit-scrollbar{display:none}
-html,body{overflow-x:hidden;font-family:'DM Sans',sans-serif;background:#e8ebe9;overscroll-behavior:none}
+html,body{font-family:'DM Sans',sans-serif;background:#e8ebe9;overflow-x:hidden;overflow-y:auto;height:auto;-webkit-overflow-scrolling:touch}
 :root{
   --primary:#0d7a3e;--primary-light:#e8f5ee;--primary-dark:#065c2e;
   --accent:#f59e0b;--bg:#f8faf9;--card:#fff;
@@ -23,7 +22,7 @@ html,body{overflow-x:hidden;font-family:'DM Sans',sans-serif;background:#e8ebe9;
   --grad-accent:linear-gradient(135deg,#f59e0b 0%,#d97706 100%);
 }
 
-.app{width:100%;max-width:430px;margin:0 auto;min-height:100vh;min-height:100dvh;background:var(--bg);position:relative;overflow-x:hidden;box-shadow:0 0 60px rgba(0,0,0,.12)}
+.app{width:100%;max-width:430px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;box-shadow:0 0 60px rgba(0,0,0,.12)}
 
 /* Header */
 .header{background:var(--grad);padding:14px 20px;position:sticky;top:0;z-index:50}
@@ -37,7 +36,7 @@ html,body{overflow-x:hidden;font-family:'DM Sans',sans-serif;background:#e8ebe9;
 .badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;border-radius:20px;min-width:18px;height:18px;display:flex;align-items:center;justify-content:center;border:2px solid var(--primary)}
 
 /* Content */
-.content{padding-bottom:90px;min-height:calc(100vh - 56px)}
+.content{padding-bottom:120px}
 
 /* Bottom Nav */
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:#fff;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0 max(8px,env(safe-area-inset-bottom));z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
@@ -95,7 +94,7 @@ html,body{overflow-x:hidden;font-family:'DM Sans',sans-serif;background:#e8ebe9;
 /* Overlay & Modal */
 .overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
 .overlay.open{opacity:1;pointer-events:auto}
-.modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:430px;max-height:92vh;overflow:auto;padding:24px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.modal{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:430px;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
 .overlay.open .modal{transform:translateY(0)}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .modal-title{font-size:18px;font-weight:700;color:var(--text)}
@@ -192,7 +191,7 @@ html,body{overflow-x:hidden;font-family:'DM Sans',sans-serif;background:#e8ebe9;
 .order-opt:active{transform:scale(.98)}
 
 /* Horizontal scroll */
-.h-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.h-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;touch-action:pan-x pan-y}
 .h-scroll>*{scroll-snap-align:start}
 
 /* Recommended */
@@ -215,6 +214,10 @@ html,body{overflow-x:hidden;font-family:'DM Sans',sans-serif;background:#e8ebe9;
 /* Animations */
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .fade-in{animation:fadeIn .3s ease}
+
+/* Touch & Scroll fixes */
+.content, .section, .cat-grid, .qa-grid{touch-action:pan-y}
+body.modal-open{overflow:hidden;position:fixed;width:100%;height:100%}
 
 /* Install banner */
 .install-banner{background:var(--primary-light);border:1px solid var(--primary);border-radius:14px;padding:14px 16px;margin:12px 20px 0;display:flex;align-items:center;gap:12px}
@@ -297,6 +300,15 @@ let state = {
 };
 
 function setState(updates) {
+  if ('overlay' in updates) {
+    if (updates.overlay) {
+      document.body.classList.add('modal-open');
+      document.body.dataset.scrollY = window.scrollY;
+    } else {
+      document.body.classList.remove('modal-open');
+      window.scrollTo(0, parseInt(document.body.dataset.scrollY || '0'));
+    }
+  }
   Object.assign(state, updates);
   render();
 }
