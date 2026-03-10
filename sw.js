@@ -1,10 +1,10 @@
-const CACHE_NAME = 'nextgenmart-v1';
+const CACHE_NAME = 'nextgenmart-v2';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', event => {
@@ -25,6 +25,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(r => r || fetch(event.request))
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
+
